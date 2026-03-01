@@ -1,0 +1,50 @@
+generator client {
+    provider = "prisma-client-js"
+    binaryTargets = ["native", "linux-musl-arm64-openssl-3.0.x"]
+    output = "/home/ubuntu/oms_practice_website/nextjs_space/node_modules/.prisma/client"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+model ConsultationRequest {
+  id                    String   @id @default(cuid())
+  fullName              String
+  phone                 String
+  email                 String
+  procedureOfInterest   String
+  preferredContactTime  String
+  preferredLocation     String   @default("no-preference")
+  status                String   @default("new")
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  @@index([createdAt])
+  @@index([status])
+}
+
+model Referral {
+  id                    String   @id @default(cuid())
+  doctorName            String
+  practiceName          String
+  doctorPhone           String
+  doctorEmail           String
+  doctorFax             String?
+  patientName           String
+  patientPhone          String
+  patientDOB            DateTime
+  patientEmail          String?
+  reasonForReferral     String?
+  urgency               String   @default("routine")
+  preferredLocation     String   @default("no-preference")
+  clinicalNotes         String?
+  status                String   @default("new")
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  @@index([createdAt])
+  @@index([status])
+  @@index([urgency])
+}
