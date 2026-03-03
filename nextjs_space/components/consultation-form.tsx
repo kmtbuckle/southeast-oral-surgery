@@ -14,6 +14,7 @@ import {
 } from '@/components/ui/select';
 import { Calendar, Clock, Mail, MapPin, Phone, User } from 'lucide-react';
 import { motion } from 'framer-motion';
+const FORMSPREE_URL = 'https://formspree.io/f/mykdrkzv';
 
 interface FormData {
   fullName: string;
@@ -45,17 +46,27 @@ export default function ConsultationForm() {
     setSubmitStatus({ type: null, message: '' });
 
     try {
-      const response = await fetch('/api/consultation', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
+      const body = new URLSearchParams({
+  fullName: formData.fullName,
+  phone: formData.phone,
+  email: formData.email,
+  procedureOfInterest: formData.procedureOfInterest,
+  preferredContactTime: formData.preferredContactTime,
+  preferredLocation: formData.preferredLocation,
+});
+
+const response = await fetch(FORMSPREE_URL, {
+  method: 'POST',
+  headers: {
+    'Accept': 'application/json',
+    'Content-Type': 'application/x-www-form-urlencoded',
+  },
+  body,
+});
 
       const result = await response?.json?.();
 
-      if (response?.ok && result?.success) {
+      if (response?.ok) {
         setSubmitStatus({
           type: 'success',
           message: 'Thank you! Our team will contact you within 1 business day.',
