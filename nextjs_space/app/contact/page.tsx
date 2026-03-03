@@ -177,12 +177,14 @@ export default function ContactPage() {
       </section>
 
       {/* Consultation Form */}
-      <section className="bg-gradient-to-b from-stone-50 to-white py-16 sm:py-20">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <ConsultationForm />
-        </div>
-      </section>
-
+      <section
+  id="consultation-form"
+  className="bg-gradient-to-b from-stone-50 to-white py-16 sm:py-20"
+>
+  <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <ConsultationForm />
+  </div>
+</section>
       {/* Phone CTA */}
       <section className="bg-primary py-12">
         <div className="mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
