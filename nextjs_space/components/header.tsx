@@ -78,12 +78,14 @@ export default function Header() {
             })}
           </nav>
 
-          {/* CTA Button */}
-          <div className="hidden lg:flex lg:items-center">
-            <Button onClick={scrollToConsultation} className="bg-primary hover:bg-primary/90">
-              Request Consultation
-            </Button>
-          </div>
+         {/* CTA Button */}
+<div className="hidden lg:flex lg:items-center">
+  <Button asChild className="bg-primary hover:bg-primary/90">
+    <Link href="/contact#consultation-form">
+      Request Consultation
+    </Link>
+  </Button>
+</div>
 
           {/* Mobile menu button */}
           <div className="flex lg:hidden">
