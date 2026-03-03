@@ -176,7 +176,7 @@ export default function ContactPage() {
         </div>
       </section>
       
-      {/* Consultation Form */}
+{/* Consultation Form */}
 <section
   id="consultation-form"
   className="bg-gradient-to-b from-stone-50 to-white py-16 sm:py-20 scroll-mt-24"
