@@ -80,11 +80,11 @@ export default function Header() {
 
          {/* CTA Button */}
 <div className="hidden lg:flex lg:items-center">
-  <Button asChild className="bg-primary hover:bg-primary/90">
-    <Link href="/contact#consultation-form">
-      Request Consultation
-    </Link>
-  </Button>
+ <Button asChild className="bg-primary hover:bg-primary/90">
+  <Link href="/contact#consultation-form" scroll={true}>
+    Request Consultation
+  </Link>
+</Button>
 </div>
 
           {/* Mobile menu button */}
