@@ -5,12 +5,21 @@ import { usePathname, useRouter } from 'next/navigation';
 import { Phone, MapPin } from 'lucide-react';
 import { useCallback } from 'react';
 
-const LINKS = [
-  { name: 'About', href: '/about' },
-  { name: 'Services', href: '/services' },
+const PATIENT_INFO_LINKS = [
   { name: 'Patient Resources', href: '/patient-resources' },
-  { name: 'Referring Doctors', href: '/referring-doctors' },
-  { name: 'Contact', href: '/contact' },
+  { name: 'Patient Registration', href: '/patient-resources#patient-registration' },
+  { name: 'Pre-Op Instructions', href: '/patient-resources#pre-op' },
+  { name: 'Post-Op Care', href: '/patient-resources#post-op' },
+  { name: 'Insurance', href: '/patient-resources#insurance' },
+  { name: 'Financing', href: '/patient-resources#financing' },
+];
+
+const SERVICE_LINKS = [
+  { name: 'Dental Implants', href: '/services#dental-implants' },
+  { name: 'Wisdom Teeth', href: '/services#wisdom-teeth' },
+  { name: 'Bone Grafting', href: '/services#bone-grafting' },
+  { name: 'Sedation Options', href: '/services#sedation' },
+  { name: 'View All Services', href: '/services' },
 ];
 
 export default function Footer() {
@@ -35,7 +44,8 @@ export default function Footer() {
   return (
     <footer className="border-t border-gray-100 bg-white">
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 gap-10 lg:grid-cols-3">
+        {/* Top grid */}
+        <div className="grid grid-cols-1 gap-10 lg:grid-cols-4">
           {/* Brand */}
           <div>
             <Link href="/" className="inline-flex items-center">
@@ -47,33 +57,39 @@ export default function Footer() {
             </p>
           </div>
 
-          {/* Links */}
+          {/* Patient Info */}
           <div>
-            <p className="text-sm font-semibold text-gray-900">Site</p>
-            <ul className="mt-4 grid grid-cols-2 gap-y-3 text-sm">
-              {LINKS.map((l) => (
+            <p className="text-sm font-semibold text-gray-900">Patient Info</p>
+            <ul className="mt-4 space-y-3 text-sm">
+              {PATIENT_INFO_LINKS.map((l) => (
                 <li key={l.href}>
                   <Link href={l.href} className="text-gray-600 hover:text-primary">
                     {l.name}
                   </Link>
                 </li>
               ))}
-              <li>
-                <Link
-                  href="/patient-resources/patient-registration"
-                  className="text-gray-600 hover:text-primary"
-                >
-                  Patient Registration
-                </Link>
-              </li>
             </ul>
           </div>
 
-          {/* Contact */}
+          {/* Services */}
           <div>
-            <p className="text-sm font-semibold text-gray-900">Contact</p>
+            <p className="text-sm font-semibold text-gray-900">Services</p>
+            <ul className="mt-4 space-y-3 text-sm">
+              {SERVICE_LINKS.map((l) => (
+                <li key={l.href}>
+                  <Link href={l.href} className="text-gray-600 hover:text-primary">
+                    {l.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
 
-            <div className="mt-4 space-y-4 text-sm text-gray-600">
+          {/* Locations */}
+          <div>
+            <p className="text-sm font-semibold text-gray-900">Locations</p>
+
+            <div className="mt-4 space-y-5 text-sm text-gray-600">
               {/* Phones */}
               <div className="space-y-2">
                 <a
@@ -97,7 +113,7 @@ export default function Footer() {
               </div>
 
               {/* Addresses */}
-              <div className="space-y-3">
+              <div className="space-y-4">
                 <div className="flex items-start gap-2">
                   <MapPin className="mt-0.5 h-4 w-4 text-primary" />
                   <div>
@@ -117,7 +133,7 @@ export default function Footer() {
                 </div>
               </div>
 
-              {/* Footer CTA (utility-style, reliable scroll) */}
+              {/* CTA */}
               <button
                 type="button"
                 onClick={goToConsultation}
@@ -129,8 +145,18 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="mt-10 border-t border-gray-100 pt-6 text-xs text-gray-500">
-          © {new Date().getFullYear()} Southeast Oral &amp; Maxillofacial Surgery. All rights reserved.
+        {/* Bottom row */}
+        <div className="mt-10 flex flex-col gap-4 border-t border-gray-100 pt-6 text-xs text-gray-500 sm:flex-row sm:items-center sm:justify-between">
+          <p>
+            © {new Date().getFullYear()} Southeast Oral &amp; Maxillofacial Surgery. All rights
+            reserved.
+          </p>
+
+          {/* Optional: enable if/when these pages exist */}
+          <div className="flex gap-4">
+            {/* <Link href="/privacy" className="hover:text-primary">Privacy</Link>
+            <Link href="/accessibility" className="hover:text-primary">Accessibility</Link> */}
+          </div>
         </div>
       </div>
     </footer>
