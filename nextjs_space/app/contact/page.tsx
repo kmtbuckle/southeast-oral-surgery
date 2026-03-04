@@ -1,7 +1,11 @@
-import { MapPin, Phone, Clock, Mail } from 'lucide-react';
-import { Metadata } from 'next';
-import ConsultationForm from '@/components/consultation-form';
-import { Button } from '@/components/ui/button';
+'use client'
+
+import { useEffect } from "react"
+import { MapPin, Phone, Clock, Mail } from 'lucide-react'
+import { Metadata } from 'next'
+import ConsultationForm from '@/components/consultation-form'
+import { Button } from '@/components/ui/button'
+
 
 export const metadata: Metadata = {
   title: 'Contact Us | Southeast Oral & Maxillofacial Surgery',
@@ -43,6 +47,14 @@ const locations = [
 ];
 
 export default function ContactPage() {
+  useEffect(() => {
+  if (window.location.hash === "#consultation-form") {
+    const el = document.getElementById("consultation-form")
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth" })
+    }
+  }
+}, [])
   return (
     <div className="bg-white">
       {/* Hero */}
