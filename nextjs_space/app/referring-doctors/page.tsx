@@ -26,7 +26,7 @@ const referralMethods = [
     icon: Download,
     title: 'Referral Slip (PDF)',
     description:
-      'Download and complete our referral slip. Send it with your patient or fax it to our office.',
+      'Download and complete our referral slip. Send it with your patient, fax it to our office, or send it via email to imaging@omsnc.com.',
     cta: {
       label: 'Download PDF',
       href: '/referral-slip.pdf',
@@ -129,68 +129,6 @@ export default function ReferringDoctorsPage() {
                 </div>
               );
             })}
-          </div>
-        </div>
-      </section>
-
-      {/* Referral Slip PDF */}
-      <section className="bg-stone-50 py-12">
-        <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
-          <div className="rounded-xl bg-white p-8 shadow-sm ring-1 ring-gray-100">
-            <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
-              <div className="flex items-start space-x-4">
-                <div className="flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                  <FileText className="h-7 w-7" />
-                </div>
-                <div>
-                  <h3 className="text-lg font-semibold text-gray-900">Referral Slip (PDF)</h3>
-                  <p className="mt-1 text-gray-600">
-                    Download our referral slip, complete it, and send it with your patient or fax it
-                    to our office.
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row">
-                <a href="/referral-slip.pdf" target="_blank" rel="noopener noreferrer">
-                  <Button className="w-full bg-primary hover:bg-primary/90 sm:w-auto">
-                    <Download className="mr-2 h-4 w-4" />
-                    Download PDF
-                  </Button>
-                </a>
-                <a href="/referral-slip.pdf" target="_blank" rel="noopener noreferrer">
-                  <Button
-                    variant="outline"
-                    className="w-full border-primary text-primary hover:bg-primary/5 sm:w-auto"
-                  >
-                    <ExternalLink className="mr-2 h-4 w-4" />
-                    Open in New Tab
-                  </Button>
-                </a>
-              </div>
-            </div>
-
-            {/* Embedded PDF preview */}
-            <div className="mt-6 overflow-hidden rounded-xl border border-gray-100 bg-white">
-              <div className="flex items-center justify-between border-b border-gray-100 px-4 py-3">
-                <p className="text-sm font-medium text-gray-900">Preview</p>
-                <a
-                  href="/referral-slip.pdf"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-sm font-medium text-primary hover:underline"
-                >
-                  View full size
-                </a>
-              </div>
-              <div className="h-[560px] w-full">
-                <iframe
-                  src="/referral-slip.pdf"
-                  title="Referral Slip PDF"
-                  className="h-full w-full"
-                />
-              </div>
-            </div>
           </div>
         </div>
       </section>
