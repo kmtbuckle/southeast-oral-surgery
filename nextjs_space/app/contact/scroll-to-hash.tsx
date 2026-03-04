@@ -1,43 +1,29 @@
 'use client';
 
 import { useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 
-const TARGET_HASH = '#consultation-form';
-const TARGET_ID = 'consultation-form';
+export default function ScrollToHash() {
+  const pathname = usePathname();
 
-function scrollWhenReady() {
-  if (typeof window === 'undefined') return;
-  if (window.location.hash !== TARGET_HASH) return;
-
-  let attempts = 0;
-  const maxAttempts = 20; // ~2s at 100ms
-
-  const tryScroll = () => {
-    attempts += 1;
-    const el = document.getElementById(TARGET_ID);
-
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      return;
-    }
-
-    if (attempts < maxAttempts) {
-      window.setTimeout(tryScroll, 100);
-    }
-  };
-
-  tryScroll();
-}
-
-export default function HashScroll() {
   useEffect(() => {
-    scrollWhenReady();
+    if (typeof window === 'undefined') return;
 
-    const onHashChange = () => scrollWhenReady();
-    window.addEventListener('hashchange', onHashChange);
+    // Only run when we're on /contact
+    if (pathname !== '/contact') return;
 
-    return () => window.removeEventListener('hashchange', onHashChange);
-  }, []);
+    const hash = window.location.hash;
+    if (!hash) return;
+
+    const id = hash.replace('#', '');
+    const el = document.getElementById(id);
+    if (!el) return;
+
+    // Let layout paint first
+    setTimeout(() => {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 50);
+  }, [pathname]);
 
   return null;
 }
