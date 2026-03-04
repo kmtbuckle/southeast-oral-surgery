@@ -1,5 +1,8 @@
+'use client';
+
 import Link from 'next/link';
 import { Metadata } from 'next';
+import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { FileText, ClipboardList, ExternalLink, Phone } from 'lucide-react';
 
@@ -14,6 +17,7 @@ type ResourceLink = {
   description?: string;
   href: string;
   external?: boolean;
+  isPdf?: boolean;
 };
 
 const QUICK_ACTIONS: ResourceLink[] = [
@@ -30,20 +34,24 @@ const QUICK_ACTIONS: ResourceLink[] = [
 ];
 
 const FORMS: ResourceLink[] = [
-  // Update these hrefs to your real PDFs/links
-  { title: 'New Patient Forms (PDF)', href: '/forms/new-patient.pdf', external: false },
-  { title: 'HIPAA Notice (PDF)', href: '/forms/hipaa.pdf', external: false },
-  { title: 'Financial Policy (PDF)', href: '/forms/financial-policy.pdf', external: false },
+  { title: 'New Patient Forms (PDF)', href: '/forms/new-patient.pdf', isPdf: true },
+  { title: 'HIPAA Notice (PDF)', href: '/forms/hipaa.pdf', isPdf: true },
+  { title: 'Financial Policy (PDF)', href: '/forms/financial-policy.pdf', isPdf: true },
 ];
 
 const INSTRUCTIONS: ResourceLink[] = [
-  // Update these hrefs to your real pages
   { title: 'Wisdom Teeth Aftercare', href: '/patient-resources/wisdom-teeth-aftercare' },
   { title: 'Dental Implant Aftercare', href: '/patient-resources/implant-aftercare' },
   { title: 'Sedation Instructions', href: '/patient-resources/sedation-instructions' },
 ];
 
 export default function PatientResourcesPage() {
+  const router = useRouter();
+
+  const goToConsultation = () => {
+    router.push('/contact#consultation-form');
+  };
+
   return (
     <div className="bg-white">
       {/* Hero */}
@@ -68,18 +76,16 @@ export default function PatientResourcesPage() {
                   {QUICK_ACTIONS[0].title}
                 </Link>
               </Button>
-              <Button asChild variant="outline">
-                <Link href={QUICK_ACTIONS[1].href}>
-                  {QUICK_ACTIONS[1].title}
-                </Link>
+
+              {/* Make consultation button bulletproof */}
+              <Button variant="outline" onClick={goToConsultation}>
+                {QUICK_ACTIONS[1].title}
               </Button>
             </div>
 
             {/* Call us block */}
-            <div className="mt-8 rounded-xl bg-white shadow-sm ring-1 ring-gray-100 p-4 sm:p-5">
-              <p className="text-sm text-gray-600">
-                Prefer to call?
-              </p>
+            <div className="mt-8 rounded-xl bg-white p-4 shadow-sm ring-1 ring-gray-100 sm:p-5">
+              <p className="text-sm text-gray-600">Prefer to call?</p>
               <div className="mt-2 flex flex-col gap-2 sm:flex-row sm:justify-center sm:gap-6">
                 <a
                   href="tel:704-541-3603"
@@ -122,25 +128,23 @@ export default function PatientResourcesPage() {
                   <li key={item.title}>
                     <a
                       href={item.href}
+                      target={item.isPdf ? '_blank' : undefined}
+                      rel={item.isPdf ? 'noopener noreferrer' : undefined}
                       className="group flex items-start justify-between rounded-lg border border-gray-100 px-4 py-3 hover:border-primary/30 hover:bg-primary/5"
                     >
                       <div>
                         <p className="font-medium text-gray-900 group-hover:text-primary">
                           {item.title}
                         </p>
-                        {item.description && (
-                          <p className="mt-1 text-sm text-gray-600">{item.description}</p>
-                        )}
+                        <p className="mt-1 text-xs text-gray-500">
+                          {item.isPdf ? 'Opens in a new tab (PDF)' : ''}
+                        </p>
                       </div>
                       <ExternalLink className="mt-1 h-4 w-4 text-gray-400 group-hover:text-primary" />
                     </a>
                   </li>
                 ))}
               </ul>
-
-              <p className="mt-5 text-xs text-gray-500">
-                (If you want these to open in a new tab, tell me which are PDFs and I’ll adjust.)
-              </p>
             </div>
 
             {/* Instructions */}
@@ -192,7 +196,6 @@ export default function PatientResourcesPage() {
             </div>
           </div>
 
-          {/* Small note / gentle SEO */}
           <div className="mx-auto mt-10 max-w-3xl text-center text-sm text-gray-500">
             Two convenient locations serving Charlotte and Albemarle, NC.
           </div>
