@@ -1,13 +1,12 @@
 import Link from 'next/link';
 import { Metadata } from 'next';
-import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import { FileText, ClipboardList, ExternalLink, Phone } from 'lucide-react';
+import { FileText, ClipboardList, ExternalLink, Phone, ShieldCheck, CreditCard } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: 'Patient Resources | Southeast Oral Surgery',
   description:
-    'Patient forms, registration, instructions, and resources for Southeast Oral Surgery in Charlotte and Albemarle, NC.',
+    'Patient registration, insurance & financing information, and resources for Southeast Oral Surgery in Charlotte and Albemarle, NC.',
 };
 
 type ResourceLink = {
@@ -15,14 +14,18 @@ type ResourceLink = {
   description?: string;
   href: string;
   external?: boolean;
-  isPdf?: boolean;
+  badge?: string;
 };
+
+const PATIENT_REGISTRATION_URL =
+  'https://mysecurepractice.com/Truform/588916e4-f60d-4967-ad8e-490f84f81445/Submission/Create';
 
 const QUICK_ACTIONS: ResourceLink[] = [
   {
     title: 'Patient Registration',
     description: 'Complete registration paperwork before your appointment.',
-    href: '/patient-resources/patient-registration',
+    href: PATIENT_REGISTRATION_URL,
+    external: true,
   },
   {
     title: 'Request a Consultation',
@@ -32,9 +35,24 @@ const QUICK_ACTIONS: ResourceLink[] = [
 ];
 
 const FORMS: ResourceLink[] = [
-  { title: 'New Patient Forms (PDF)', href: '/forms/new-patient.pdf', isPdf: true },
-  { title: 'HIPAA Notice (PDF)', href: '/forms/hipaa.pdf', isPdf: true },
-  { title: 'Financial Policy (PDF)', href: '/forms/financial-policy.pdf', isPdf: true },
+  {
+    title: 'Medical History Form',
+    description: 'Completed in-office to ensure accuracy and compliance.',
+    href: '#',
+    badge: 'In-office',
+  },
+  {
+    title: 'Consent for Treatment',
+    description: 'Completed in-office at your appointment.',
+    href: '#',
+    badge: 'In-office',
+  },
+  {
+    title: 'HIPAA Privacy Notice',
+    description: 'Reviewed and acknowledged in-office.',
+    href: '#',
+    badge: 'In-office',
+  },
 ];
 
 const INSTRUCTIONS: ResourceLink[] = [
@@ -43,13 +61,24 @@ const INSTRUCTIONS: ResourceLink[] = [
   { title: 'Sedation Instructions', href: '/patient-resources/sedation-instructions' },
 ];
 
+const INSURANCE_IN_NETWORK = [
+  'Aetna Dental PPO (except Medicare dental plans)',
+  'Ameritas Dental (Connection Dental)',
+  'Assurant Dental PPO',
+  'Blue Cross Blue Shield of NC Dental',
+  'Cigna Dental (not in-network with all plans — call for details)',
+  'Connection Dental Plans',
+  'Coventry Dental',
+  'Delta Dental PPO',
+  'Denex',
+  'GEHA Dental (through Connection Dental)',
+  'Guardian Dental',
+  'Lincoln Financial',
+  'MetLife',
+  'UnitedHealthcare Dental',
+];
+
 export default function PatientResourcesPage() {
-  const router = useRouter();
-
-  const goToConsultation = () => {
-    router.push('/contact#consultation-form');
-  };
-
   return (
     <div className="bg-white">
       {/* Hero */}
@@ -63,21 +92,19 @@ export default function PatientResourcesPage() {
               Everything you need, <span className="text-primary">in one place</span>
             </h1>
             <p className="mx-auto mt-4 max-w-2xl text-lg text-gray-600">
-              Forms, registration, and instructions—so your visit is smooth and stress-free.
+              Registration, insurance &amp; financing, and instructions—so your visit is smooth and stress-free.
             </p>
 
             {/* Quick actions */}
             <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center">
               <Button asChild className="bg-primary hover:bg-primary/90">
-                <Link href={QUICK_ACTIONS[0].href}>
+                <a href={QUICK_ACTIONS[0].href} target="_blank" rel="noopener noreferrer">
                   <ClipboardList className="mr-2 h-4 w-4" />
                   {QUICK_ACTIONS[0].title}
-                </Link>
+                </a>
               </Button>
-
-              {/* Make consultation button bulletproof */}
-              <Button variant="outline" onClick={goToConsultation}>
-                {QUICK_ACTIONS[1].title}
+              <Button asChild variant="outline">
+                <Link href={QUICK_ACTIONS[1].href}>{QUICK_ACTIONS[1].title}</Link>
               </Button>
             </div>
 
@@ -106,8 +133,9 @@ export default function PatientResourcesPage() {
       </section>
 
       {/* Main content */}
-      <section className="py-12 sm:py-14">
+      <section className="py-10 sm:py-12">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          {/* Top row: Forms / Instructions / What to bring */}
           <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
             {/* Forms */}
             <div className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-gray-100">
@@ -115,34 +143,47 @@ export default function PatientResourcesPage() {
                 <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
                   <FileText className="h-5 w-5" />
                 </div>
-                <h2 className="text-xl font-bold text-gray-900">Forms & Documents</h2>
+                <h2 className="text-xl font-bold text-gray-900">Forms &amp; Documents</h2>
               </div>
               <p className="mt-3 text-sm text-gray-600">
-                Download and complete forms ahead of time.
+                Patient registration is online. Remaining forms are completed in-office.
               </p>
 
               <ul className="mt-5 space-y-3">
                 {FORMS.map((item) => (
                   <li key={item.title}>
-                    <a
-                      href={item.href}
-                      target={item.isPdf ? '_blank' : undefined}
-                      rel={item.isPdf ? 'noopener noreferrer' : undefined}
-                      className="group flex items-start justify-between rounded-lg border border-gray-100 px-4 py-3 hover:border-primary/30 hover:bg-primary/5"
-                    >
+                    <div className="flex items-start justify-between rounded-lg border border-gray-100 px-4 py-3">
                       <div>
-                        <p className="font-medium text-gray-900 group-hover:text-primary">
-                          {item.title}
-                        </p>
-                        <p className="mt-1 text-xs text-gray-500">
-                          {item.isPdf ? 'Opens in a new tab (PDF)' : ''}
-                        </p>
+                        <p className="font-medium text-gray-900">{item.title}</p>
+                        {item.description && (
+                          <p className="mt-1 text-sm text-gray-600">{item.description}</p>
+                        )}
                       </div>
-                      <ExternalLink className="mt-1 h-4 w-4 text-gray-400 group-hover:text-primary" />
-                    </a>
+                      {item.badge ? (
+                        <span className="mt-1 inline-flex items-center rounded-full bg-stone-100 px-2 py-0.5 text-xs font-medium text-stone-700">
+                          {item.badge}
+                        </span>
+                      ) : (
+                        <ExternalLink className="mt-1 h-4 w-4 text-gray-400" />
+                      )}
+                    </div>
                   </li>
                 ))}
               </ul>
+
+              <div className="mt-5 rounded-xl bg-stone-50 p-4">
+                <p className="text-sm font-medium text-gray-900">Patient Registration</p>
+                <p className="mt-1 text-sm text-gray-600">
+                  Complete registration paperwork before your appointment.
+                </p>
+                <div className="mt-3">
+                  <Button asChild className="w-full bg-primary hover:bg-primary/90">
+                    <a href={PATIENT_REGISTRATION_URL} target="_blank" rel="noopener noreferrer">
+                      Start Registration
+                    </a>
+                  </Button>
+                </div>
+              </div>
             </div>
 
             {/* Instructions */}
@@ -174,9 +215,7 @@ export default function PatientResourcesPage() {
             {/* What to expect */}
             <div className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-gray-100">
               <h2 className="text-xl font-bold text-gray-900">What to bring</h2>
-              <p className="mt-3 text-sm text-gray-600">
-                A quick checklist for a smooth visit.
-              </p>
+              <p className="mt-3 text-sm text-gray-600">A quick checklist for a smooth visit.</p>
               <ul className="mt-5 list-disc space-y-2 pl-5 text-sm text-gray-700">
                 <li>Photo ID</li>
                 <li>Insurance card (if applicable)</li>
@@ -188,8 +227,92 @@ export default function PatientResourcesPage() {
               <div className="mt-6 rounded-xl bg-stone-50 p-4">
                 <p className="text-sm font-medium text-gray-900">Need help finding something?</p>
                 <p className="mt-1 text-sm text-gray-600">
-                  Call our office and we’ll point you to the right form.
+                  Call our office and we’ll point you to the right info.
                 </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Insurance + Financing (the missing chunk) */}
+          <div className="mt-10 grid grid-cols-1 gap-8 lg:grid-cols-2">
+            {/* Insurance */}
+            <div className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-gray-100">
+              <div className="flex items-center gap-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                  <ShieldCheck className="h-5 w-5" />
+                </div>
+                <h2 className="text-xl font-bold text-gray-900">Insurance Accepted</h2>
+              </div>
+              <p className="mt-3 text-sm text-gray-600">
+                We are in-network dental providers for the plans below. If your plan isn’t listed, we can still submit
+                claims as a courtesy. Out-of-network benefits may differ.
+              </p>
+
+              <div className="mt-5 grid grid-cols-1 gap-2 sm:grid-cols-2">
+                {INSURANCE_IN_NETWORK.map((name) => (
+                  <div
+                    key={name}
+                    className="rounded-lg border border-gray-100 bg-white px-3 py-2 text-sm text-gray-700"
+                  >
+                    {name}
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-5 rounded-xl bg-stone-50 p-4 text-sm text-gray-700">
+                Questions about eligibility or benefits? You can call the member services number on your insurance card
+                or contact our office.
+              </div>
+            </div>
+
+            {/* Financing */}
+            <div className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-gray-100">
+              <div className="flex items-center gap-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                  <CreditCard className="h-5 w-5" />
+                </div>
+                <h2 className="text-xl font-bold text-gray-900">Financial Policy</h2>
+              </div>
+
+              <div className="mt-4 space-y-4 text-sm text-gray-700">
+                <div className="rounded-xl bg-stone-50 p-4">
+                  <p className="font-medium text-gray-900">Payment options</p>
+                  <p className="mt-1">
+                    For your convenience, we accept major credit cards (Visa, Mastercard, American Express) and
+                    CareCredit.
+                  </p>
+                </div>
+
+                <div className="rounded-xl bg-stone-50 p-4">
+                  <p className="font-medium text-gray-900">Estimating your portion</p>
+                  <p className="mt-1">
+                    If you have insurance, we’ll obtain an estimate of benefits prior to scheduled procedures. The
+                    estimate is based on information provided by your insurance and is not a guarantee of coverage or
+                    payment. We collect the estimated patient portion on the date of service.
+                  </p>
+                </div>
+
+                <div className="rounded-xl bg-stone-50 p-4">
+                  <p className="font-medium text-gray-900">After insurance processes</p>
+                  <p className="mt-1">
+                    We file services to insurance as a courtesy. Any remaining balance after processing becomes patient
+                    responsibility. Deductibles and co-insurance may apply, and allowed amounts may differ from office
+                    fees.
+                  </p>
+                </div>
+              </div>
+
+              <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+                <a href="tel:704-541-3603" className="w-full">
+                  <Button variant="outline" className="w-full justify-center">
+                    Charlotte Billing: (704) 541-3603
+                  </Button>
+                </a>
+                <a href="tel:704-983-2502" className="w-full">
+                  <Button variant="outline" className="w-full justify-center">
+                    Albemarle Billing: (704) 983-2502
+                  </Button>
+                </a>
               </div>
             </div>
           </div>
