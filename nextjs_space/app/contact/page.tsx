@@ -1,6 +1,4 @@
-'use client'
 
-import { useEffect } from "react"
 import { MapPin, Phone, Clock, Mail } from 'lucide-react'
 import { Metadata } from 'next'
 import ConsultationForm from '@/components/consultation-form'
