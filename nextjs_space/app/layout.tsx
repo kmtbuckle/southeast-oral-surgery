@@ -15,8 +15,8 @@ export const metadata: Metadata = {
   description: 'Expert oral and maxillofacial surgery in Charlotte and Albemarle, NC. Board-certified surgeons specializing in wisdom teeth, dental implants, jaw surgery, and facial trauma. Over 50 years of trusted care.',
   keywords: 'oral surgeon Charlotte, maxillofacial surgery Albemarle, wisdom teeth removal, dental implants NC, jaw surgery Charlotte, facial trauma, bone grafting',
   openGraph: {
-    title: 'Southeast Oral & Maxillofacial Surgery',
-    description: 'Expert oral and maxillofacial surgery in Charlotte and Albemarle, NC',
+    title: 'Southeast Oral Surgery',
+    description: 'Board-certified oral surgeons serving Charlotte and Albemarle, NC',
     images: ['/og-image.png'],
   },
   icons: {
