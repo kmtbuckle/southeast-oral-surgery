@@ -1,8 +1,9 @@
+// nextjs_space/components/header.tsx
 'use client';
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { Menu, X, Phone } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -15,58 +16,26 @@ const navigation = [
   { name: 'Contact', href: '/contact' },
 ];
 
-const FORM_HASH = '#consultation-form';
-const FORM_ID = 'consultation-form';
-
 export default function Header() {
+  const router = useRouter();
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
 
-  // Sticky header shadow/background on scroll
+  // Header styling on scroll
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
     const handleScroll = () => setIsScrolled(window.scrollY > 10);
-    handleScroll(); // set initial state
+    handleScroll();
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // When navigating to /contact#consultation-form, scroll after route change
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-
-    if (window.location.hash !== FORM_HASH) return;
-
-    const t = window.setTimeout(() => {
-      const el = document.getElementById(FORM_ID);
-      el?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }, 80);
-
-    return () => window.clearTimeout(t);
-  }, [pathname]);
-
-  const scrollToConsultation = () => {
+  const goToConsultation = () => {
     setMobileMenuOpen(false);
-
-    // If we are on the contact page already, scroll to the section
-    if (pathname === '/contact') {
-      const el = document.getElementById(FORM_ID);
-      el?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-
-      // keep URL in sync (optional but nice)
-      if (typeof window !== 'undefined') {
-        window.history.replaceState(null, '', `/contact${FORM_HASH}`);
-      }
-      return;
-    }
-
-    // If we are on any other page, navigate to contact page with hash
-    if (typeof window !== 'undefined') {
-      window.location.assign(`/contact${FORM_HASH}`);
-    }
+    router.push('/contact#consultation-form');
   };
 
   return (
@@ -92,7 +61,7 @@ export default function Header() {
             </Link>
           </div>
 
-          {/* Desktop nav */}
+          {/* Desktop Navigation */}
           <nav className="hidden lg:flex lg:items-center lg:space-x-1">
             {navigation.map((item) => {
               const isActive = pathname === item.href;
@@ -112,7 +81,7 @@ export default function Header() {
 
           {/* Desktop CTA */}
           <div className="hidden lg:flex lg:items-center">
-            <Button onClick={scrollToConsultation} className="bg-primary hover:bg-primary/90">
+            <Button onClick={goToConsultation} className="bg-primary hover:bg-primary/90">
               Request Consultation
             </Button>
           </div>
@@ -125,11 +94,7 @@ export default function Header() {
               onClick={() => setMobileMenuOpen((v) => !v)}
             >
               <span className="sr-only">Open main menu</span>
-              {mobileMenuOpen ? (
-                <X className="h-6 w-6" aria-hidden="true" />
-              ) : (
-                <Menu className="h-6 w-6" aria-hidden="true" />
-              )}
+              {mobileMenuOpen ? <X className="h-6 w-6" aria-hidden="true" /> : <Menu className="h-6 w-6" aria-hidden="true" />}
             </button>
           </div>
         </div>
@@ -153,9 +118,7 @@ export default function Header() {
                     key={item.name}
                     href={item.href}
                     className={`block rounded-md px-3 py-2 text-base font-medium transition-colors ${
-                      isActive
-                        ? 'bg-primary/10 text-primary'
-                        : 'text-gray-700 hover:bg-primary/10 hover:text-primary'
+                      isActive ? 'bg-primary/10 text-primary' : 'text-gray-700 hover:bg-primary/10 hover:text-primary'
                     }`}
                     onClick={() => setMobileMenuOpen(false)}
                   >
@@ -189,7 +152,7 @@ export default function Header() {
 
               {/* Mobile CTA */}
               <div className="pt-3">
-                <Button onClick={scrollToConsultation} className="w-full bg-primary hover:bg-primary/90">
+                <Button onClick={goToConsultation} className="w-full bg-primary hover:bg-primary/90">
                   Request Consultation
                 </Button>
               </div>
