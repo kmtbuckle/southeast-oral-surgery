@@ -1,9 +1,10 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { Menu, X, Phone } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const navigation = [
@@ -17,16 +18,36 @@ const navigation = [
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+
   const pathname = usePathname();
+  const router = useRouter();
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 10);
-    window.addEventListener('scroll', handleScroll);
     handleScroll();
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const ctaHref = '/contact#consultation-form';
+  const scrollToConsultation = useCallback(() => {
+    setMobileMenuOpen(false);
+
+    // If already on /contact, scroll immediately (no route change)
+    if (pathname === '/contact') {
+      // Update the URL hash (nice for shareability)
+      if (typeof window !== 'undefined') {
+        window.history.replaceState(null, '', '#consultation-form');
+        const el = document.getElementById('consultation-form');
+        el?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+      return;
+    }
+
+    // Otherwise navigate to /contact with hash.
+    // Contact page will handle smooth scrolling via HashScroll component.
+    router.push('/contact#consultation-form');
+  }, [pathname, router]);
 
   return (
     <header
@@ -51,7 +72,7 @@ export default function Header() {
             </Link>
           </div>
 
-          {/* Desktop Nav */}
+          {/* Desktop Navigation */}
           <nav className="hidden lg:flex lg:items-center lg:space-x-1">
             {navigation.map((item) => {
               const isActive = pathname === item.href;
@@ -69,15 +90,11 @@ export default function Header() {
             })}
           </nav>
 
-          {/* Desktop CTA (NO custom Button component) */}
+          {/* Desktop CTA */}
           <div className="hidden lg:flex lg:items-center">
-            <Link
-              href={ctaHref}
-              scroll={false}
-              className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-primary/90"
-            >
+            <Button onClick={scrollToConsultation} className="bg-primary hover:bg-primary/90">
               Request Consultation
-            </Link>
+            </Button>
           </div>
 
           {/* Mobile menu button */}
@@ -88,11 +105,7 @@ export default function Header() {
               onClick={() => setMobileMenuOpen((v) => !v)}
             >
               <span className="sr-only">Open main menu</span>
-              {mobileMenuOpen ? (
-                <X className="h-6 w-6" aria-hidden="true" />
-              ) : (
-                <Menu className="h-6 w-6" aria-hidden="true" />
-              )}
+              {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </button>
           </div>
         </div>
@@ -128,7 +141,7 @@ export default function Header() {
               })}
 
               {/* Mobile Phone Numbers */}
-              <div className="space-y-2 border-t border-gray-100 pt-4 mt-3">
+              <div className="mt-3 space-y-2 border-t border-gray-100 pt-4">
                 <p className="px-3 text-xs font-medium uppercase tracking-wider text-gray-500">
                   Call Us
                 </p>
@@ -154,14 +167,9 @@ export default function Header() {
 
               {/* Mobile CTA */}
               <div className="pt-3">
-                <Link
-                  href={ctaHref}
-                  scroll={false}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="inline-flex w-full items-center justify-center rounded-md bg-primary px-4 py-2 text-base font-medium text-white transition-colors hover:bg-primary/90"
-                >
+                <Button onClick={scrollToConsultation} className="w-full bg-primary hover:bg-primary/90">
                   Request Consultation
-                </Link>
+                </Button>
               </div>
             </div>
           </motion.div>
