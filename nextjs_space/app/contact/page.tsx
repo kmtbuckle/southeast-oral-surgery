@@ -1,14 +1,9 @@
+'use client';
+
+import { useEffect } from 'react';
 import { MapPin, Phone, Clock } from 'lucide-react';
-import { Metadata } from 'next';
 import ConsultationForm from '@/components/consultation-form';
 import { Button } from '@/components/ui/button';
-import ScrollToHash from './scroll-to-hash';
-
-export const metadata: Metadata = {
-  title: 'Contact Us | Southeast Oral & Maxillofacial Surgery',
-  description:
-    'Contact our Charlotte and Albemarle offices for consultations, appointments, and inquiries. Two convenient locations to serve you.',
-};
 
 const locations = [
   {
@@ -45,11 +40,25 @@ const locations = [
 ];
 
 export default function ContactPage() {
+  // ✅ This is the “magic”: on load AND after route navigation with a hash,
+  // scroll to the form reliably.
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    const hash = window.location.hash;
+    if (hash === '#consultation-form') {
+      // Wait for layout/paint so the element definitely exists
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          const el = document.getElementById('consultation-form');
+          el?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+      });
+    }
+  }, []);
+
   return (
     <div className="bg-white">
-      {/* This is the magic that makes /contact#consultation-form scroll reliably */}
-      <ScrollToHash />
-
       {/* Hero */}
       <section className="bg-gradient-to-b from-stone-50 to-white py-16 sm:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -207,13 +216,21 @@ export default function ContactPage() {
           </p>
           <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:justify-center">
             <a href="tel:704-541-3603">
-              <Button size="lg" variant="secondary" className="w-full bg-white text-primary hover:bg-gray-100 sm:w-auto">
+              <Button
+                size="lg"
+                variant="secondary"
+                className="w-full bg-white text-primary hover:bg-gray-100 sm:w-auto"
+              >
                 <Phone className="mr-2 h-4 w-4" />
                 Charlotte: (704) 541-3603
               </Button>
             </a>
             <a href="tel:704-983-2502">
-              <Button size="lg" variant="outline" className="w-full border-white bg-transparent text-white hover:bg-white hover:text-primary sm:w-auto">
+              <Button
+                size="lg"
+                variant="outline"
+                className="w-full border-white bg-transparent text-white hover:bg-white hover:text-primary sm:w-auto"
+              >
                 <Phone className="mr-2 h-4 w-4" />
                 Albemarle: (704) 983-2502
               </Button>
