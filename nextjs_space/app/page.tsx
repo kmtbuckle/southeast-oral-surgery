@@ -60,7 +60,7 @@ export default function HomePage() {
             alt="Charlotte skyline"
             fill
             priority
-            className="object-cover"
+            className="object-cover object-[50%_75%]"
           />
 
           {/* Subtle global overlay for consistency */}
