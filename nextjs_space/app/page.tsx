@@ -8,8 +8,6 @@ import {
   Scan,
   Syringe,
   AlertTriangle,
-  MapPin,
-  Phone,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import ConsultationForm from '@/components/consultation-form';
@@ -56,7 +54,7 @@ export default function HomePage() {
     <div className="bg-white">
       {/* HERO (Charlotte skyline) */}
       <section className="relative overflow-hidden">
-        <div className="relative h-[520px] w-full sm:h-[600px]">
+        <div className="relative h-[540px] w-full sm:h-[620px]">
           <Image
             src="/images/IMG_0229.jpeg"
             alt="Charlotte skyline"
@@ -64,8 +62,12 @@ export default function HomePage() {
             priority
             className="object-cover"
           />
-          {/* Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-b from-slate-900/55 via-slate-900/35 to-white/0" />
+
+          {/* Subtle global overlay for consistency */}
+          <div className="absolute inset-0 bg-gradient-to-b from-slate-900/45 via-slate-900/25 to-slate-900/15" />
+
+          {/* Stronger left scrim for readability behind text */}
+          <div className="absolute inset-0 bg-gradient-to-r from-slate-900/75 via-slate-900/40 to-transparent" />
         </div>
 
         {/* Hero content */}
@@ -75,10 +77,13 @@ export default function HomePage() {
               <p className="text-sm font-medium uppercase tracking-widest text-white/80">
                 Board-certified oral &amp; maxillofacial surgery
               </p>
+
               <h1 className="mt-3 text-4xl font-bold tracking-tight text-white sm:text-5xl">
-                Expert surgical care in Charlotte &amp; Albemarle
+                Expert surgical care in <br className="hidden sm:block" />
+                Charlotte &amp; Albemarle
               </h1>
-              <p className="mt-4 text-lg text-white/85">
+
+              <p className="mt-4 max-w-xl text-lg text-white/85">
                 Compassionate, advanced oral surgery—from dental implants to wisdom teeth—with
                 sedation options for comfort and peace of mind.
               </p>
@@ -89,6 +94,7 @@ export default function HomePage() {
                     Request a Consultation
                   </Button>
                 </Link>
+
                 <Link href="/services">
                   <Button
                     size="lg"
@@ -105,84 +111,6 @@ export default function HomePage() {
                 Two convenient locations • Trusted for generations
               </div>
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* TWO LOCATIONS (moved up, important) */}
-      <section className="bg-stone-50 py-12 sm:py-16">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <p className="text-sm font-medium uppercase tracking-widest text-primary/70">
-              Locations
-            </p>
-            <h2 className="mt-3 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-              Serving Charlotte &amp; Albemarle
-            </h2>
-            <p className="mx-auto mt-4 max-w-3xl text-lg text-gray-600">
-              Choose the office that’s most convenient—we’ll take great care of you at either
-              location.
-            </p>
-          </div>
-
-          <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2">
-            {/* Charlotte */}
-            <div className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-gray-100">
-              <div className="flex items-start gap-3">
-                <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10 text-primary">
-                  <MapPin className="h-5 w-5" />
-                </div>
-                <div className="flex-1">
-                  <h3 className="text-lg font-semibold text-gray-900">Charlotte Office</h3>
-                  <p className="mt-1 text-sm text-gray-700">
-                    3111 Springbank Lane, Suite A
-                    <br />
-                    Charlotte, NC 28226
-                  </p>
-
-                  <a
-                    href="tel:704-541-3603"
-                    className="mt-4 inline-flex items-center gap-2 rounded-lg bg-primary/10 px-4 py-2 text-sm font-medium text-primary hover:bg-primary/15"
-                  >
-                    <Phone className="h-4 w-4" />
-                    (704) 541-3603
-                  </a>
-                </div>
-              </div>
-            </div>
-
-            {/* Albemarle */}
-            <div className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-gray-100">
-              <div className="flex items-start gap-3">
-                <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10 text-primary">
-                  <MapPin className="h-5 w-5" />
-                </div>
-                <div className="flex-1">
-                  <h3 className="text-lg font-semibold text-gray-900">Albemarle Office</h3>
-                  <p className="mt-1 text-sm text-gray-700">
-                    1003 North Sixth Street
-                    <br />
-                    Albemarle, NC 28001
-                  </p>
-
-                  <a
-                    href="tel:704-983-2502"
-                    className="mt-4 inline-flex items-center gap-2 rounded-lg bg-primary/10 px-4 py-2 text-sm font-medium text-primary hover:bg-primary/15"
-                  >
-                    <Phone className="h-4 w-4" />
-                    (704) 983-2502
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="mt-8 text-center">
-            <Link href="/contact">
-              <Button variant="outline" className="border-2 border-primary/20 text-primary hover:bg-primary/5">
-                Get Directions &amp; Contact Info
-              </Button>
-            </Link>
           </div>
         </div>
       </section>
