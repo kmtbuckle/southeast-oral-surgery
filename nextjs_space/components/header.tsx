@@ -34,14 +34,14 @@ export default function Header() {
 const scrollToConsultation = () => {
   setMobileMenuOpen(false);
 
-  // If already on the contact page, scroll
+  // If we're already on the contact page, scroll smoothly
   if (pathname === '/contact') {
-    const el = document.getElementById('consultation-form');
-    el?.scrollIntoView({ behavior: 'smooth' });
+    const element = document.getElementById('consultation-form');
+    element?.scrollIntoView({ behavior: 'smooth' });
     return;
   }
 
-  // Otherwise navigate to the page with the anchor
+  // If we're on any other page, go to the contact page + jump to the form
   window.location.href = '/contact#consultation-form';
 };
 
