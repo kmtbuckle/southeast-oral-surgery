@@ -88,10 +88,9 @@ const scrollToConsultation = () => {
 
          {/* CTA Button */}
 <div className="hidden lg:flex lg:items-center">
-  <Button asChild className="bg-primary hover:bg-primary/90">
-    <a href="/contact#consultation-form">Request Consultation</a>
+  <Button onClick={scrollToConsultation} className="bg-primary hover:bg-primary/90">
+    Request Consultation
   </Button>
-</div>
 </div>
 
           {/* Mobile menu button */}
