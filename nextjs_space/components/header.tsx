@@ -31,11 +31,19 @@ export default function Header() {
     }
   }, []);
 
-  const scrollToConsultation = () => {
-    const element = document?.getElementById('consultation-form');
-    element?.scrollIntoView({ behavior: 'smooth' });
-    setMobileMenuOpen(false);
-  };
+const scrollToConsultation = () => {
+  setMobileMenuOpen(false);
+
+  // If already on the contact page, scroll
+  if (pathname === '/contact') {
+    const el = document.getElementById('consultation-form');
+    el?.scrollIntoView({ behavior: 'smooth' });
+    return;
+  }
+
+  // Otherwise navigate to the page with the anchor
+  window.location.href = '/contact#consultation-form';
+};
 
   return (
     <header
@@ -80,11 +88,10 @@ export default function Header() {
 
          {/* CTA Button */}
 <div className="hidden lg:flex lg:items-center">
- <Button asChild className="bg-primary hover:bg-primary/90">
-  <Link href="/contact#consultation-form" scroll={true}>
-    Request Consultation
-  </Link>
-</Button>
+  <Button asChild className="bg-primary hover:bg-primary/90">
+    <a href="/contact#consultation-form">Request Consultation</a>
+  </Button>
+</div>
 </div>
 
           {/* Mobile menu button */}
