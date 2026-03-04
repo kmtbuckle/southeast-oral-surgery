@@ -1,11 +1,11 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Menu, X, Phone, MapPin } from 'lucide-react';
+import { Menu, X, Phone } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 
 const navigation = [
   { name: 'About', href: '/about' },
@@ -15,46 +15,59 @@ const navigation = [
   { name: 'Contact', href: '/contact' },
 ];
 
+const FORM_HASH = '#consultation-form';
+const FORM_ID = 'consultation-form';
+
 export default function Header() {
+  const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const pathname = usePathname();
 
+  // Sticky header shadow/background on scroll
   useEffect(() => {
-  const handleScroll = () => {
-    setIsScrolled(window?.scrollY > 10);
-  };
+    if (typeof window === 'undefined') return;
 
-  if (typeof window !== 'undefined') {
+    const handleScroll = () => setIsScrolled(window.scrollY > 10);
+    handleScroll(); // set initial state
+
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }
-}, []);
+  }, []);
 
-useEffect(() => {
-  if (typeof window === 'undefined') return;
+  // When navigating to /contact#consultation-form, scroll after route change
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
 
-  if (window.location.hash === '#consultation-form') {
-    setTimeout(() => {
-      const el = document.getElementById('consultation-form');
-      el?.scrollIntoView({ behavior: 'smooth' });
-    }, 50);
-  }
-}, [pathname]);
+    if (window.location.hash !== FORM_HASH) return;
 
-const scrollToConsultation = () => {
-  setMobileMenuOpen(false);
+    const t = window.setTimeout(() => {
+      const el = document.getElementById(FORM_ID);
+      el?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 80);
 
-  // If we're already on the contact page, scroll smoothly
-  if (pathname === '/contact') {
-    const element = document.getElementById('consultation-form');
-    element?.scrollIntoView({ behavior: 'smooth' });
-    return;
-  }
+    return () => window.clearTimeout(t);
+  }, [pathname]);
 
-  // If we're on any other page, go to the contact page + jump to the form
-  window.location.href = '/contact#consultation-form';
-};
+  const scrollToConsultation = () => {
+    setMobileMenuOpen(false);
+
+    // If we are on the contact page already, scroll to the section
+    if (pathname === '/contact') {
+      const el = document.getElementById(FORM_ID);
+      el?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+      // keep URL in sync (optional but nice)
+      if (typeof window !== 'undefined') {
+        window.history.replaceState(null, '', `/contact${FORM_HASH}`);
+      }
+      return;
+    }
+
+    // If we are on any other page, navigate to contact page with hash
+    if (typeof window !== 'undefined') {
+      window.location.assign(`/contact${FORM_HASH}`);
+    }
+  };
 
   return (
     <header
@@ -66,10 +79,10 @@ const scrollToConsultation = () => {
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-18 items-center justify-between py-3">
-          {/* Logo - Clickable with larger hit area */}
+          {/* Logo */}
           <div className="flex-shrink-0">
-            <Link 
-              href="/" 
+            <Link
+              href="/"
               className="group flex items-center space-x-2 rounded-lg px-2 py-1.5 -ml-2 transition-colors hover:bg-primary/5"
               aria-label="Southeast Oral Surgery - Home"
             >
@@ -79,37 +92,37 @@ const scrollToConsultation = () => {
             </Link>
           </div>
 
-          {/* Desktop Navigation */}
+          {/* Desktop nav */}
           <nav className="hidden lg:flex lg:items-center lg:space-x-1">
-            {navigation?.map?.((item) => {
-              const isActive = pathname === item?.href;
+            {navigation.map((item) => {
+              const isActive = pathname === item.href;
               return (
                 <Link
-                  key={item?.name}
-                  href={item?.href ?? '/'}
+                  key={item.name}
+                  href={item.href}
                   className={`rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-primary/10 hover:text-primary ${
                     isActive ? 'text-primary' : 'text-gray-700'
                   }`}
                 >
-                  {item?.name}
+                  {item.name}
                 </Link>
               );
             })}
           </nav>
 
-         {/* CTA Button */}
-<div className="hidden lg:flex lg:items-center">
-  <Button onClick={scrollToConsultation} className="bg-primary hover:bg-primary/90">
-    Request Consultation
-  </Button>
-</div>
+          {/* Desktop CTA */}
+          <div className="hidden lg:flex lg:items-center">
+            <Button onClick={scrollToConsultation} className="bg-primary hover:bg-primary/90">
+              Request Consultation
+            </Button>
+          </div>
 
           {/* Mobile menu button */}
           <div className="flex lg:hidden">
             <button
               type="button"
               className="inline-flex items-center justify-center rounded-md p-2 text-gray-700 hover:bg-primary/10 hover:text-primary"
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              onClick={() => setMobileMenuOpen((v) => !v)}
             >
               <span className="sr-only">Open main menu</span>
               {mobileMenuOpen ? (
@@ -133,12 +146,12 @@ const scrollToConsultation = () => {
             className="lg:hidden"
           >
             <div className="space-y-1 border-t border-gray-200 bg-white px-4 pb-4 pt-2 shadow-lg">
-              {navigation?.map?.((item) => {
-                const isActive = pathname === item?.href;
+              {navigation.map((item) => {
+                const isActive = pathname === item.href;
                 return (
                   <Link
-                    key={item?.name}
-                    href={item?.href ?? '/'}
+                    key={item.name}
+                    href={item.href}
                     className={`block rounded-md px-3 py-2 text-base font-medium transition-colors ${
                       isActive
                         ? 'bg-primary/10 text-primary'
@@ -146,35 +159,37 @@ const scrollToConsultation = () => {
                     }`}
                     onClick={() => setMobileMenuOpen(false)}
                   >
-                    {item?.name}
+                    {item.name}
                   </Link>
                 );
               })}
-              
+
               {/* Mobile Phone Numbers */}
-              <div className="space-y-2 border-t border-gray-100 pt-4 mt-3">
+              <div className="mt-3 space-y-2 border-t border-gray-100 pt-4">
                 <p className="px-3 text-xs font-medium uppercase tracking-wider text-gray-500">Call Us</p>
                 <a
                   href="tel:704-541-3603"
                   className="flex items-center space-x-3 rounded-md px-3 py-2.5 text-base font-medium text-gray-700 hover:bg-primary/10 hover:text-primary"
                 >
                   <Phone className="h-4 w-4 text-gray-500" />
-                  <span><span className="text-gray-500">Charlotte:</span> (704) 541-3603</span>
+                  <span>
+                    <span className="text-gray-500">Charlotte:</span> (704) 541-3603
+                  </span>
                 </a>
                 <a
                   href="tel:704-983-2502"
                   className="flex items-center space-x-3 rounded-md px-3 py-2.5 text-base font-medium text-gray-700 hover:bg-primary/10 hover:text-primary"
                 >
                   <Phone className="h-4 w-4 text-gray-500" />
-                  <span><span className="text-gray-500">Albemarle:</span> (704) 983-2502</span>
+                  <span>
+                    <span className="text-gray-500">Albemarle:</span> (704) 983-2502
+                  </span>
                 </a>
               </div>
-              
+
+              {/* Mobile CTA */}
               <div className="pt-3">
-                <Button
-                  onClick={scrollToConsultation}
-                  className="w-full bg-primary hover:bg-primary/90"
-                >
+                <Button onClick={scrollToConsultation} className="w-full bg-primary hover:bg-primary/90">
                   Request Consultation
                 </Button>
               </div>
