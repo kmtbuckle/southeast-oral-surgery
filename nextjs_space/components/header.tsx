@@ -21,15 +21,26 @@ export default function Header() {
   const pathname = usePathname();
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window?.scrollY > 10);
-    };
+  const handleScroll = () => {
+    setIsScrolled(window?.scrollY > 10);
+  };
 
-    if (typeof window !== 'undefined') {
-      window.addEventListener('scroll', handleScroll);
-      return () => window?.removeEventListener('scroll', handleScroll);
-    }
-  }, []);
+  if (typeof window !== 'undefined') {
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }
+}, []);
+
+useEffect(() => {
+  if (typeof window === 'undefined') return;
+
+  if (window.location.hash === '#consultation-form') {
+    setTimeout(() => {
+      const el = document.getElementById('consultation-form');
+      el?.scrollIntoView({ behavior: 'smooth' });
+    }, 50);
+  }
+}, [pathname]);
 
 const scrollToConsultation = () => {
   setMobileMenuOpen(false);
