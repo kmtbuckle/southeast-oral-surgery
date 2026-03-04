@@ -73,7 +73,7 @@ export default function HomePage() {
         {/* Hero content */}
         <div className="absolute inset-0">
           <div className="mx-auto flex h-full max-w-7xl items-center px-4 sm:px-6 lg:px-8">
-            <div className="max-w-2xl">
+            <div className="max-w-2xl rounded-xl bg-white/10 backdrop-blur-md p-8 border border-white/20">
               <p className="text-sm font-medium uppercase tracking-widest text-white/80">
                 Board-certified oral &amp; maxillofacial surgery
               </p>
