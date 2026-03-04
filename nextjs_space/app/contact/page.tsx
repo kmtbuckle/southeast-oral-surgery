@@ -45,14 +45,6 @@ const locations = [
 ];
 
 export default function ContactPage() {
-  useEffect(() => {
-  if (window.location.hash === "#consultation-form") {
-    const el = document.getElementById("consultation-form")
-    if (el) {
-      el.scrollIntoView({ behavior: "smooth" })
-    }
-  }
-}, [])
   return (
     <div className="bg-white">
       {/* Hero */}
