@@ -2,9 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { Menu, X, Phone } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const navigation = [
@@ -15,16 +14,10 @@ const navigation = [
   { name: 'Contact', href: '/contact' },
 ];
 
-const CONSULT_HASH = '#consultation-form';
-const CONSULT_PATH = `/contact${CONSULT_HASH}`;
-const CONSULT_ID = 'consultation-form';
-
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-
   const pathname = usePathname();
-  const router = useRouter();
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 10);
@@ -33,22 +26,7 @@ export default function Header() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const goToConsultation = () => {
-    setMobileMenuOpen(false);
-
-    // If already on /contact, scroll immediately
-    if (pathname === '/contact') {
-      // Update hash (nice for sharing / back button)
-      if (typeof window !== 'undefined') window.location.hash = CONSULT_HASH;
-
-      const el = document.getElementById(CONSULT_ID);
-      el?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      return;
-    }
-
-    // If coming from another page, navigate to /contact#consultation-form
-    router.push(CONSULT_PATH);
-  };
+  const ctaHref = '/contact#consultation-form';
 
   return (
     <header
@@ -73,7 +51,7 @@ export default function Header() {
             </Link>
           </div>
 
-          {/* Desktop nav */}
+          {/* Desktop Nav */}
           <nav className="hidden lg:flex lg:items-center lg:space-x-1">
             {navigation.map((item) => {
               const isActive = pathname === item.href;
@@ -91,15 +69,15 @@ export default function Header() {
             })}
           </nav>
 
-          {/* Desktop CTA */}
+          {/* Desktop CTA (NO custom Button component) */}
           <div className="hidden lg:flex lg:items-center">
-            <Button
-              type="button"
-              onClick={goToConsultation}
-              className="bg-primary hover:bg-primary/90"
+            <Link
+              href={ctaHref}
+              scroll={false}
+              className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-primary/90"
             >
               Request Consultation
-            </Button>
+            </Link>
           </div>
 
           {/* Mobile menu button */}
@@ -110,7 +88,11 @@ export default function Header() {
               onClick={() => setMobileMenuOpen((v) => !v)}
             >
               <span className="sr-only">Open main menu</span>
-              {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+              {mobileMenuOpen ? (
+                <X className="h-6 w-6" aria-hidden="true" />
+              ) : (
+                <Menu className="h-6 w-6" aria-hidden="true" />
+              )}
             </button>
           </div>
         </div>
@@ -172,13 +154,14 @@ export default function Header() {
 
               {/* Mobile CTA */}
               <div className="pt-3">
-                <Button
-                  type="button"
-                  onClick={goToConsultation}
-                  className="w-full bg-primary hover:bg-primary/90"
+                <Link
+                  href={ctaHref}
+                  scroll={false}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="inline-flex w-full items-center justify-center rounded-md bg-primary px-4 py-2 text-base font-medium text-white transition-colors hover:bg-primary/90"
                 >
                   Request Consultation
-                </Button>
+                </Link>
               </div>
             </div>
           </motion.div>
