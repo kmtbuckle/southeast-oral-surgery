@@ -1,4 +1,3 @@
-// nextjs_space/components/header.tsx
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -6,7 +5,7 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { Menu, X, Phone } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { AnimatePresence, motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const navigation = [
   { name: 'About', href: '/about' },
@@ -16,26 +15,39 @@ const navigation = [
   { name: 'Contact', href: '/contact' },
 ];
 
+const CONSULT_HASH = '#consultation-form';
+const CONSULT_PATH = `/contact${CONSULT_HASH}`;
+const CONSULT_ID = 'consultation-form';
+
 export default function Header() {
-  const router = useRouter();
-  const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
 
-  // Header styling on scroll
+  const pathname = usePathname();
+  const router = useRouter();
+
   useEffect(() => {
-    if (typeof window === 'undefined') return;
-
     const handleScroll = () => setIsScrolled(window.scrollY > 10);
-    handleScroll();
-
     window.addEventListener('scroll', handleScroll);
+    handleScroll();
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   const goToConsultation = () => {
     setMobileMenuOpen(false);
-    router.push('/contact#consultation-form');
+
+    // If already on /contact, scroll immediately
+    if (pathname === '/contact') {
+      // Update hash (nice for sharing / back button)
+      if (typeof window !== 'undefined') window.location.hash = CONSULT_HASH;
+
+      const el = document.getElementById(CONSULT_ID);
+      el?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      return;
+    }
+
+    // If coming from another page, navigate to /contact#consultation-form
+    router.push(CONSULT_PATH);
   };
 
   return (
@@ -61,7 +73,7 @@ export default function Header() {
             </Link>
           </div>
 
-          {/* Desktop Navigation */}
+          {/* Desktop nav */}
           <nav className="hidden lg:flex lg:items-center lg:space-x-1">
             {navigation.map((item) => {
               const isActive = pathname === item.href;
@@ -81,7 +93,11 @@ export default function Header() {
 
           {/* Desktop CTA */}
           <div className="hidden lg:flex lg:items-center">
-            <Button onClick={goToConsultation} className="bg-primary hover:bg-primary/90">
+            <Button
+              type="button"
+              onClick={goToConsultation}
+              className="bg-primary hover:bg-primary/90"
+            >
               Request Consultation
             </Button>
           </div>
@@ -94,7 +110,7 @@ export default function Header() {
               onClick={() => setMobileMenuOpen((v) => !v)}
             >
               <span className="sr-only">Open main menu</span>
-              {mobileMenuOpen ? <X className="h-6 w-6" aria-hidden="true" /> : <Menu className="h-6 w-6" aria-hidden="true" />}
+              {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </button>
           </div>
         </div>
@@ -118,7 +134,9 @@ export default function Header() {
                     key={item.name}
                     href={item.href}
                     className={`block rounded-md px-3 py-2 text-base font-medium transition-colors ${
-                      isActive ? 'bg-primary/10 text-primary' : 'text-gray-700 hover:bg-primary/10 hover:text-primary'
+                      isActive
+                        ? 'bg-primary/10 text-primary'
+                        : 'text-gray-700 hover:bg-primary/10 hover:text-primary'
                     }`}
                     onClick={() => setMobileMenuOpen(false)}
                   >
@@ -128,8 +146,10 @@ export default function Header() {
               })}
 
               {/* Mobile Phone Numbers */}
-              <div className="mt-3 space-y-2 border-t border-gray-100 pt-4">
-                <p className="px-3 text-xs font-medium uppercase tracking-wider text-gray-500">Call Us</p>
+              <div className="space-y-2 border-t border-gray-100 pt-4 mt-3">
+                <p className="px-3 text-xs font-medium uppercase tracking-wider text-gray-500">
+                  Call Us
+                </p>
                 <a
                   href="tel:704-541-3603"
                   className="flex items-center space-x-3 rounded-md px-3 py-2.5 text-base font-medium text-gray-700 hover:bg-primary/10 hover:text-primary"
@@ -152,7 +172,11 @@ export default function Header() {
 
               {/* Mobile CTA */}
               <div className="pt-3">
-                <Button onClick={goToConsultation} className="w-full bg-primary hover:bg-primary/90">
+                <Button
+                  type="button"
+                  onClick={goToConsultation}
+                  className="w-full bg-primary hover:bg-primary/90"
+                >
                   Request Consultation
                 </Button>
               </div>
