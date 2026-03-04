@@ -60,14 +60,14 @@ export default function HomePage() {
             alt="Charlotte skyline"
             fill
             priority
-            className="object-cover object-[50%_75%]"
+            className="object-cover object-[50%_80%]"
           />
 
           {/* Subtle global overlay for consistency */}
-          <div className="absolute inset-0 bg-gradient-to-b from-slate-900/45 via-slate-900/25 to-slate-900/15" />
+          <div className="absolute inset-0 bg-gradient-to-b from-slate-900/20 via-slate-900/10 to-transparent" />
 
           {/* Stronger left scrim for readability behind text */}
-          <div className="absolute inset-0 bg-gradient-to-r from-slate-900/75 via-slate-900/40 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-r from-slate-900/40 via-slate-900/15 to-transparent" />
         </div>
 
         {/* Hero content */}
